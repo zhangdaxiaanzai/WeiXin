@@ -1,12 +1,14 @@
 package cn.com.java.model;
 
-public class TextMessage{
-	private String Content;
-	private String MsgId;
+import java.util.List;
+
+public class NewsMessage{
 	private String ToUserName;
 	private String FromUserName;
 	private String CreateTime;
 	private String MsgType;
+	private int ArticleCount;
+	private List<News> Articles;
 	public String getToUserName() {
 		return this.ToUserName;
 	}
@@ -32,18 +34,19 @@ public class TextMessage{
 		this.MsgType = msgType;
 	}
 	
-	public String getContent() {
-		return this.Content;
+	public List<News> getArticles() {
+		return Articles;
 	}
-	public void setContent(String content) {
-		Content = content;
+	public void setArticles(List<News> articles) {
+		Articles = articles;
 	}
-	public String getMsgId() {
-		return this.MsgId;
+	public int getArticleCount() {
+		return ArticleCount;
 	}
-	public void setMsgId(String msgId) {
-		MsgId = msgId;
+	public void setArticleCount(int articleCount) {
+		ArticleCount = articleCount;
 	}
 	
 	
+
 }

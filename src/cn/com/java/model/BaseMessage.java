@@ -1,8 +1,6 @@
 package cn.com.java.model;
 
-public class TextMessage{
-	private String Content;
-	private String MsgId;
+public class BaseMessage {
 	private String ToUserName;
 	private String FromUserName;
 	private String CreateTime;
@@ -30,19 +28,6 @@ public class TextMessage{
 	}
 	public void setMsgType(String msgType) {
 		this.MsgType = msgType;
-	}
-	
-	public String getContent() {
-		return this.Content;
-	}
-	public void setContent(String content) {
-		Content = content;
-	}
-	public String getMsgId() {
-		return this.MsgId;
-	}
-	public void setMsgId(String msgId) {
-		MsgId = msgId;
 	}
 	
 	

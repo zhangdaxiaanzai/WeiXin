@@ -2,6 +2,7 @@ package cn.com.java.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +17,13 @@ import org.dom4j.io.SAXReader;
 
 import com.thoughtworks.xstream.XStream;
 
+import cn.com.java.model.News;
+import cn.com.java.model.NewsMessage;
 import cn.com.java.model.TextMessage;
 
 public class MessageUtil {
 	public static final String MESSAGE_TEXT="text";//文本消息
+	public static final String MESSAGE_NEWS = "news";//图文消息
 	public static final String MESSAGE_IMAGE="image";//图片消息
 	public static final String MESSAGE_VOICE="voice";//语音消息
 	public static final String MESSAGE_VIDEO="video";//视频消息
@@ -33,6 +37,9 @@ public class MessageUtil {
 	public static final String EVENT_VIEW="VIEW";//点击菜单跳转链接时的事件
 	public static final String EVENT_SCAN="SCAN";//用户已关注时的事件（扫二维码时）
 	public static final String EVENT_LOCATION="LOCATION";//进入会话（上报地理位置）
+	
+	public static final String WX_APPID="wx7746475d34337f9e";
+	public static final String WX_APPSECRET="3aaf9cce4fdac4fa24f8417d3e52d356";
 	
 	
 	/**
@@ -114,7 +121,8 @@ public class MessageUtil {
 		StringBuffer sb=new StringBuffer();
 		sb.append("欢迎您的关注,请按照菜单提示进行操作：\n\n");
 		sb.append("1、公众号介绍\n");
-		sb.append("2、作者介绍\n\n");
+		sb.append("2、作者介绍\n");
+		sb.append("3、图文消息\n");
 		sb.append("回复"+"?"+"调出此菜单！");
 		return sb.toString();
 	}
@@ -141,4 +149,58 @@ public class MessageUtil {
 		sb.append("帅哥！！帅哥！！帅哥！！帅哥！！帅哥！！");
 		return sb.toString();
 	}
+	/**
+	 * 图文消息转化为xml
+	 * @param newsMessage
+	 * @return
+	 */
+	public static String newstMessageToXml(NewsMessage newsMessage){
+		XStream xStream=new XStream();
+		xStream.alias("xml", newsMessage.getClass());
+		xStream.alias("item",new News().getClass());
+		return xStream.toXML(newsMessage);
+		 
+	}
+	/**
+	 * 组装图文消息
+	 * @param ToUserName
+	 * @param FromUserName
+	 * @return
+	 */
+	public static String initNewsMessage(String ToUserName,String FromUserName){
+		String message = null;
+		List<News> listNews=new ArrayList<News>();
+		NewsMessage newsMessage=new NewsMessage();
+		
+		News news = new News();
+		news.setTitle("作者介绍");
+		news.setDescription("张鞍,一位帅哥！");
+		news.setPicUrl("http://zhangan.ngrok.cc/WeixinTest/images/imooc.jpg");
+		news.setUrl("www.baidu.com");
+		
+//		News news1=new News();
+//		news.setTitle("作者介绍");
+//		news.setDescription("张鞍,一位帅哥！");
+//		news.setPicUrl("http://zhangan.ngrok.cc/WeixinTest/images/fei.jpg");
+//		news.setUrl("www.iqiyi.com");
+		
+		listNews.add(news);
+//		listNews.add(news1);
+		Date date=new Date();
+		
+		newsMessage.setFromUserName(ToUserName);
+		newsMessage.setToUserName(FromUserName);
+		newsMessage.setMsgType(MESSAGE_NEWS);
+		newsMessage.setCreateTime(date.toString());
+		newsMessage.setArticleCount(listNews.size());
+		newsMessage.setArticles(listNews);
+		
+		
+		message=newstMessageToXml(newsMessage);
+		return message;
+				
+	}
+	
+	
+	
 }
