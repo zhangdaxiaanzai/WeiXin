@@ -14,9 +14,14 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 
 import com.thoughtworks.xstream.XStream;
 
+import cn.com.java.model.Image;
+import cn.com.java.model.ImageMessage;
+import cn.com.java.model.Music;
+import cn.com.java.model.MusicMessage;
 import cn.com.java.model.News;
 import cn.com.java.model.NewsMessage;
 import cn.com.java.model.TextMessage;
@@ -25,6 +30,7 @@ public class MessageUtil {
 	public static final String MESSAGE_TEXT="text";//文本消息
 	public static final String MESSAGE_NEWS = "news";//图文消息
 	public static final String MESSAGE_IMAGE="image";//图片消息
+	public static final String MESSAGE_MUSIC="music";//图片消息
 	public static final String MESSAGE_VOICE="voice";//语音消息
 	public static final String MESSAGE_VIDEO="video";//视频消息
 	public static final String MESSAGE_LINK="link";//链接消息
@@ -123,6 +129,8 @@ public class MessageUtil {
 		sb.append("1、公众号介绍\n");
 		sb.append("2、作者介绍\n");
 		sb.append("3、图文消息\n");
+		sb.append("4、图片消息\n");
+		sb.append("5、音乐消息\n");
 		sb.append("回复"+"?"+"调出此菜单！");
 		return sb.toString();
 	}
@@ -159,6 +167,27 @@ public class MessageUtil {
 		xStream.alias("xml", newsMessage.getClass());
 		xStream.alias("item",new News().getClass());
 		return xStream.toXML(newsMessage);
+		 
+	}
+	/**
+	 * 图片消息转化为xml
+	 * @param newsMessage
+	 * @return
+	 */
+	public static String imageMessageToXml(ImageMessage imageMessage){
+		XStream xstream = new XStream();
+		xstream.alias("xml", imageMessage.getClass());
+		return xstream.toXML(imageMessage);
+	}
+	/**
+	 * 音乐消息转化为xml
+	 * @param newsMessage
+	 * @return
+	 */
+	public static String musicMessageToXml(MusicMessage musicMessage){
+		XStream xStream=new XStream();
+		xStream.alias("xml", musicMessage.getClass());
+		return xStream.toXML(musicMessage);
 		 
 	}
 	/**
@@ -201,6 +230,58 @@ public class MessageUtil {
 				
 	}
 	
-	
+	/**
+	 * 组装图片消息
+	 * @param ToUserName
+	 * @param FromUserName
+	 * @return
+	 */
+	public static String initImageMessage(String ToUserName,String FromUserName){
+		String message=null;
+		Image image=new Image();
+		ImageMessage imageMessage=new ImageMessage();
+		image.setMediaId("gNf2Fj3OIDY6Syte4ospPSaoXUIEXGNDESGg1hbh6sNa0EGE06Ug2X-6kJL43q_w");
+		Date date=new Date();
+		
+		imageMessage.setFromUserName(ToUserName);
+		imageMessage.setToUserName(FromUserName);
+		imageMessage.setMsgType(MESSAGE_IMAGE);
+		imageMessage.setCreateTime(date.toString());
+		imageMessage.setImage(image);
+		
+		message=imageMessageToXml(imageMessage);
+		
+		return message;
+		
+	}
+	/**
+	 * 组装音乐消息
+	 * @param ToUserName
+	 * @param FromUserName
+	 * @return
+	 */
+	public static String initMusicMessage(String ToUserName,String FromUserName){
+		String message=null;
+		Music music=new Music();
+		MusicMessage musicMessage=new MusicMessage();
+		
+		music.setTitle("see you again");
+		music.setDescription("速7片尾曲");
+		music.setHQMusicUrl("http://zhangan.ngrok.cc/WeixinTest/resource/See You Again.mp3");
+		music.setMusicUrl("http://zhangan.ngrok.cc/WeixinTest/resource/See You Again.mp3");
+		music.setThumbMediaId("lfDbIdEgucUj9O6wEV6vz9nybpKspMlAQiLK_cEtLjuXGQ9J7ADGGUobEEjC3FMc");
+		
+		Date date=new Date();
+		
+		musicMessage.setFromUserName(ToUserName);
+		musicMessage.setToUserName(FromUserName);
+		musicMessage.setMsgType(MESSAGE_MUSIC);
+		musicMessage.setCreateTime(date.toString());
+		musicMessage.setMusic(music);
+		
+		message=musicMessageToXml(musicMessage);
+		
+		return message;
+	}
 	
 }

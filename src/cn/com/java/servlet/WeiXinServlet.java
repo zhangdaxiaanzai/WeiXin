@@ -61,6 +61,12 @@ public class WeiXinServlet extends HttpServlet {
 					message=MessageUtil.initText(ToUserName, FromUserName, MessageUtil.firstMenu());
 				}else if("2".equals(Content)){
 					message=MessageUtil.initText(ToUserName, FromUserName, MessageUtil.secondMenu());
+				}else if("3".equals(Content)){
+					message=MessageUtil.initNewsMessage(ToUserName, FromUserName);
+				}else if("4".equals(Content)){
+					message=MessageUtil.initImageMessage(ToUserName, FromUserName);
+				}else if("5".equals(Content)){
+					message=MessageUtil.initMusicMessage(ToUserName, FromUserName);
 				}else if("?".equals(Content) || "？".equals(Content)){
 					message=MessageUtil.initText(ToUserName, FromUserName, MessageUtil.menuText());
 				}else {
@@ -76,7 +82,7 @@ public class WeiXinServlet extends HttpServlet {
 				if(MessageUtil.EVENT_UNSUBSCRIBE.equals(eventType)){//取消关注事件
 					message=null;
 				}
-				if(MessageUtil.EVENT_LOCATION.equals(eventType)){//上报地理位置（进入会话就会上报）
+				/*if(MessageUtil.EVENT_LOCATION.equals(eventType)){//上报地理位置（进入会话就会上报）
 					String Latitude=map.get("Latitude");//地理位置纬度
 					String Longitude=map.get("Longitude");//地理位置经度
 					String Precision=map.get("Precision");//地理位置精度
@@ -86,7 +92,7 @@ public class WeiXinServlet extends HttpServlet {
 					sb.append("纬度:" + Longitude+"\n");
 					sb.append("精度:" + Precision);
 					message=MessageUtil.initText(ToUserName, FromUserName, sb.toString());
-				}
+				}*/
 			}
 			out.println(message);
 		} catch (DocumentException e) {
